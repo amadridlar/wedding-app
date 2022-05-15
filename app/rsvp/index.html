@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
+        integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
+        crossorigin="anonymous"></script>
+    <title>Irene y Loren</title><!-- JavaScript Bundle with Popper -->
+    <link rel="icon" href="../assets/wedding-couple.png" />
+
+</head>
+
+<body>
+    <div class="container-fluid">
+        <form id="rsvp-form" class="needs-validation" novalidate>
+            <h3>Datos de contacto</h3>
+            <div class="form-floating">
+                <input type="text" class="form-control" id="name" placeholder="Nombre y apellidos" required>
+                <label for="name">Nombre y apellidos</label>
+                <!-- <div class="invalid-feedback">Campo obligatorio</div> -->
+            </div>
+            <div class="form-floating mb-3">
+                <input type="email" class="form-control" id="email" placeholder="Email" required>
+                <label for="email">Email</label>
+                <!-- <div class="invalid-feedback">Campo obligatorio</div> -->
+            </div>
+            <br>
+            <h3>¿Vienes con acompañante?</h3>
+            <div class="form-floating">
+                <input type="text" class="form-control" id="guestName" placeholder="Nombre y apellidos">
+                <label for="guestName">Nombre y apellidos</label>
+            </div>
+            <br>
+            <h3>¿Vienes con niños?</h3>
+            <div class="form-floating">
+                <input type="number" class="form-control" id="kids" placeholder="¿Cuántos niños?">
+                <label for="kids" class="form-label">¿Cuántos niños?</label>
+            </div>
+            <br>
+            <h3>¿Vas a necesitar ir al evento en autocar?</h3>
+            <select class="form-select" id="busNeeded">
+                <option value="no" selected>No</option>
+                <option value="yes">Sí</option>
+            </select>
+            <label for="busNumber" class="form-label">¿Cuántos iríais en autocar?</label>
+            <input type="number" class="form-control" id="busNumber" placeholder="0" disabled>
+            <div id="validationBusMenuNumber" class="invalid-feedback">
+                El número de personas en autocar es mayor que el total de confirmados (incluyéndote a ti, acompañante y
+                niños).
+            </div>
+            <br>
+            <h3>Con respecto al menú de la cena</h3>
+            <div class="mb-3">
+                <label for="intolerances" class="form-label">¿Alguna intolerancia?</label>
+                <textarea class="form-control" id="intolerances" rows="1"></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="veggi" class="form-label">Menú vegano/vegetariano</label>
+                <textarea class="form-control" id="veggi" rows="1"></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="kids-menu" class="form-label">Menú infantil</label>
+                <select id="kids-menu" class="form-select">
+                    <option value="no" selected>No</option>
+                    <option value="yes">Sí</option>
+                </select>
+                <label for="number-kids-menu" class="form-label">¿Cuántos menús infantiles?</label>
+                <input type="number" class="form-control" id="number-kids-menu" placeholder="0" disabled>
+                <div id="validationKidsMenuNumber" class="invalid-feedback">
+                    El número de menús infantiles no puede ser mayor que el número de niños confirmados. Revisa el campo
+                    más arriba
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="otherIntolerances" class="form-label">¿Alguna otra consideración alimentaria?</label>
+                <textarea class="form-control" id="otherIntolerances" rows="1"></textarea>
+            </div>
+            <div>
+                <div id="invalid-alert" class="alert alert-danger" role="alert" hidden>
+                    Revisa los datos del formulario
+                </div>
+                <button id="confirm-button" type="submit" class="btn btn-primary">
+                    <span id="spinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
+                        hidden></span>
+                    Confirmar
+                </button>
+            </div>
+        </form>
+        <!-- MODALS -->
+        <div class="modal" id="successModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        Se ha confirmado correctamente tu asistencia.
+                        <br>
+                        ¡Muchas gracias y nos vemos pronto! 👰‍♀️ 🤵‍♂️
+                    </div>
+                    <div class="modal-footer">
+                        <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
+                        <a type="button" class="btn btn-primary" href="/noscasamos" role="button">Continuar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" id="errorModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div id="invalid-confirmation-modal" class="alert alert-danger" role="alert">
+                            <p>Lo sentimos, ha habido un problema y no se ha podido completar tu confirmación &#128532
+                            </p>
+                            <br>
+                            <p>Inténtalo de nuevo más tarde o contacta con nosotros</p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Entendido</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
+    </script>
+<script>
+    document.getElementById('busNeeded').addEventListener('change', () => {
+        if (document.getElementById('busNeeded').value === 'yes') {
+            document.getElementById('busNumber').removeAttribute('disabled');
+        } else {
+            document.getElementById('busNumber').setAttribute('disabled', true);
+            document.getElementById('busNumber').value = 0;
+        }
+    });
+
+    document.getElementById('kids-menu').addEventListener('change', () => {
+        if (document.getElementById('kids-menu').value === 'yes') {
+            document.getElementById('number-kids-menu').removeAttribute('disabled');
+        } else {
+            document.getElementById('number-kids-menu').setAttribute('disabled', true);
+            document.getElementById('number-kids-menu').value = 0;
+        }
+    });
+</script>
+<script>
+    document.getElementById('number-kids-menu').addEventListener('change', () => {
+        if (document.getElementById('number-kids-menu').value > document.getElementById('kids').value) {
+            document.getElementById('number-kids-menu').classList.add('is-invalid');
+            document.getElementById('kids').classList.add('is-invalid');
+        } else if (document.getElementById('number-kids-menu').value <= document.getElementById('kids').value) {
+            document.getElementById('number-kids-menu').classList.remove('is-invalid');
+            document.getElementById('kids').classList.remove('is-invalid');
+
+        }
+    });
+
+    document.getElementById('kids').addEventListener('change', () => {
+        if (document.getElementById('number-kids-menu').value > document.getElementById('kids').value) {
+            document.getElementById('number-kids-menu').classList.add('is-invalid');
+            document.getElementById('kids').classList.add('is-invalid');
+        } else if (document.getElementById('number-kids-menu').value <= document.getElementById('kids').value) {
+            document.getElementById('number-kids-menu').classList.remove('is-invalid');
+            document.getElementById('kids').classList.remove('is-invalid');
+
+        }
+    });
+</script>
+<script>
+    const sumGuests = () => {
+        let guestNumber = 1;
+        if (document.getElementById('guestName').value)
+            guestNumber += 1;
+
+        if (document.getElementById('kids').value)
+            guestNumber += parseInt(document.getElementById('kids').value);
+
+        return guestNumber;
+    };
+
+    document.getElementById('busNumber').addEventListener('change', () => {
+        if (document.getElementById('busNumber').value > sumGuests()) {
+            document.getElementById('busNumber').classList.add('is-invalid');
+            document.getElementById('kids').classList.add('is-invalid');
+            document.getElementById('guestName').classList.add('is-invalid');
+        } else if (document.getElementById('busNumber').value <= sumGuests()){
+            document.getElementById('busNumber').classList.remove('is-invalid');
+            document.getElementById('kids').classList.remove('is-invalid');
+            document.getElementById('guestName').classList.remove('is-invalid');
+        }
+    });
+
+    document.getElementById('guestName').addEventListener('change', () => {
+        if (document.getElementById('busNumber').value > sumGuests()) {
+            document.getElementById('busNumber').classList.add('is-invalid');
+            document.getElementById('kids').classList.add('is-invalid');
+            document.getElementById('guestName').classList.add('is-invalid');
+        } else if (document.getElementById('busNumber').value <= sumGuests()){
+            document.getElementById('busNumber').classList.remove('is-invalid');
+            document.getElementById('kids').classList.remove('is-invalid');
+            document.getElementById('guestName').classList.remove('is-invalid');
+        }
+    });
+
+    document.getElementById('kids').addEventListener('change', () => {
+        if (document.getElementById('busNumber').value > sumGuests()) {
+            document.getElementById('busNumber').classList.add('is-invalid');
+            document.getElementById('kids').classList.add('is-invalid');
+            document.getElementById('guestName').classList.add('is-invalid');
+        } else if (document.getElementById('busNumber').value <= sumGuests()){
+            document.getElementById('busNumber').classList.remove('is-invalid');
+            document.getElementById('kids').classList.remove('is-invalid');
+            document.getElementById('guestName').classList.remove('is-invalid');
+        }
+    });
+</script>
+<script>
+
+    const collectFormData = () => {
+        const userName = document.getElementById('name').value.trim();
+        const userEmail = document.getElementById('email').value.trim();
+        const guestName = document.getElementById('guestName').value.trim();
+        const kidsNumber = document.getElementById('kids').value ? parseInt(document.getElementById('kids').value) : 0;
+        const busNeeded = document.getElementById('busNeeded').value;
+        const busNumber = document.getElementById('busNumber').value ? parseInt(document.getElementById('busNumber').value) : 0;
+        const intolerances = document.getElementById('intolerances').value;
+        const veggi = document.getElementById('veggi').value;
+        const kidsMenu = document.getElementById('kids-menu').value;
+        const kidsMenuNumber = document.getElementById('number-kids-menu').value ? parseInt(document.getElementById('number-kids-menu').value) : 0;
+        const otherIntolerances = document.getElementById('otherIntolerances').value;
+
+        return {
+            userName: userName,
+            userEmail: userEmail,
+            guestName: guestName,
+            kidsNumber: kidsNumber,
+            busNeeded: (busNeeded === 'yes'),
+            busNumber: busNumber,
+            intolerances: intolerances,
+            veggi: veggi,
+            kidsMenu: (kidsMenu === 'yes'),
+            kidsMenuNumber: kidsMenuNumber,
+            otherIntolerances: otherIntolerances,
+        };
+    };
+
+    const showModal = (type) => {
+        const myModal = new bootstrap.Modal(document.getElementById(type));
+        myModal.show();
+    }
+
+    const sendNewGuest = () => {
+        document.getElementById('spinner').removeAttribute('hidden');
+
+        const guestData = collectFormData();
+        const headers = new Headers({
+            'Content-Type': 'application/json',
+        })
+        console.log(guestData);
+        // return fetch('http://192.168.1.104:3013/guests/newGuest', {
+        return fetch('http://127.0.0.1:3000/guests/newGuest', {
+            // return fetch('https://brulks.hopto.org/loreneapi/guests/newGuest', {
+            method: 'POST',
+            headers,
+            body: JSON.stringify(guestData),
+        })
+            .then((response) => showModal('successModal'))
+            .catch((err) => {
+                console.error(`Error sending new guest: ${err}`);
+                showModal('errorModal');
+            })
+            .finally(() => document.getElementById('spinner').hidden = true);
+
+
+
+
+    };
+
+    (() => {
+        'use strict'
+
+        const form = document.querySelector('.needs-validation');
+
+        form.addEventListener('submit', async (event) => {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+
+                document.getElementById('invalid-alert').removeAttribute('hidden');
+            } else if (form.checkValidity()) {
+                // console.log(collectFormData());
+                event.preventDefault();
+                await sendNewGuest();
+            }
+
+            form.classList.add('was-validated')
+        });
+    })();
+</script>
+
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./styles.css">
+    <title></title>
+</head>
+
+<body>
+    <table id="overallTable" class="table table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">Invitados totales</th>
+                <th scope="col">Adultos</th>
+                <th scope="col">Niños</th>
+                <th scope="col">Total menús infantiles</th>
+                <th scope="col">Total en bus</th>
+            </tr>
+        </thead>
+    </table>
+    <br>
+    <table id="guestsTable" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Email</th>
+                <th scope="col">Acompañante</th>
+                <th scope="col">Número de niños</th>
+                <th scope="col">Bus</th>
+                <th scope="col">Cuántos en Bus</th>
+                <th scope="col">Intolerancias</th>
+                <th scope="col">Veggi</th>
+                <th scope="col">Menús infantiles</th>
+                <th scope="col">Cuántos Menús infantiles</th>
+                <th scope="col">Otras intolerancias</th>
+                <th scope="col">Activo</th>
+            </tr>
+        </thead>
+    </table>
+</body>
+<script>
+    'use strict';
+
+    const getTotalData = () => {
+        return fetch('http://127.0.0.1:3000/guests/getAllGuests')
+            .then(response => response.json())
+    };
+
+    const getGuestList = () => {
+    };
+
+    (async () => {
+        // TOTAL DATA
+        const allGuests = await getTotalData();
+        const totalData = {
+            totalActives: allGuests.totalActives,
+            totalAdults: allGuests.totalActives - allGuests.totalKids,
+            totalKids: allGuests.totalKids,
+            totalKidsMenu: allGuests.totalKidsMenu,
+            totalBus: allGuests.totalBus,
+        }
+
+        let overallTable = '</tr>';
+        for (let overall in totalData) {
+            console.log(overall)
+            overallTable += `<td>${totalData[overall]}</td>`
+        }
+        overallTable += '</tr>';
+        document.getElementById('overallTable').innerHTML += overallTable;
+
+
+        // GUESTS
+        const guests = allGuests.guests;
+
+        let guestsTable = '';
+        for (let guest of guests) {
+            guestsTable += '<tr>';
+            for (let guestCell in guest) {
+                guestsTable += `<td>${guest[guestCell]}</td>`;
+            }
+            guestsTable += '</tr>';
+        }
+        document.getElementById('guestsTable').innerHTML += guestsTable;
+    })();
+</script>
+
+</html>

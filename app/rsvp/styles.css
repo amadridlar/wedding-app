@@ -1,0 +1,32 @@
+@import url("https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css");
+@import url('https://fonts.googleapis.com/css2?family=Spectral:wght@300&display=swap');
+
+body {
+    background-color: #A4C3B2;
+}
+
+.btn.btn-primary {
+    background-color: #A4C3B2;
+    border-color: #A4C3B2;
+}
+
+#rsvp-form {
+    max-width: 60rem;
+    font-family: 'Spectral', serif;
+    margin: 1rem auto;
+    padding: 2rem;
+    border-style: solid;
+    border-width: 3px;
+    border-radius: 20px;
+    border-color: black;
+    background-color: antiquewhite;
+}
+
+@media screen and (max-width: 992px) {
+    #rsvp-form {
+        font-family: 'Spectral', serif;
+        margin: auto;
+        padding: auto;
+        border-style: hidden;
+    }
+}
